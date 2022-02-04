@@ -1,0 +1,6 @@
+[submodule "tePLSQL"]
+	path = tePLSQL
+	url = https://github.com/osalvador/tePLSQL.git
+[submodule "translator"]
+	path = translator
+	url = https://github.com/MikeKutz/custom-DDL-translator.git
