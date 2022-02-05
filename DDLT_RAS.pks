@@ -3,6 +3,8 @@ package ddlt_ras
 as
     /* generates code for RAS objects
     *
+    * Checking install from web
+    *
     *
     * SECURITY CLASS JSON FORMAT (planned)
     * { OBJECT_TYPE:security_class OBJECT_NAME:hr_priv under:[ sys.dml, sys.ns ] privileges:[view_salary,ppi] }
