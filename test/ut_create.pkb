@@ -30,21 +30,22 @@ create application acl hr_acl for security class hrpriv aces (
     output CLOB;
   BEGIN
     obj := new cSQL.syntax_parser_t( 'create', 'application', 'acl');
-    DBMS_OUTPUT.PUT_LINE( 'matching "' || obj.match_string || '"' );
-    DBMS_OUTPUT.PUT_LINE( 'matching "' || obj.syntax_action || '"' );
-    dbms_output.put_line( sql_texts( sql_key_acl)  );
+    -- DBMS_OUTPUT.PUT_LINE( 'matching "' || obj.match_string || '"' );
+    -- DBMS_OUTPUT.PUT_LINE( 'matching "' || obj.syntax_action || '"' );
+    -- dbms_output.put_line( sql_texts( sql_key_acl)  );
     
     j := obj.transpile( sql_texts( sql_key_acl) );
 
     if j is null THEN
       dbms_output .put_line( 'j is null');
+      RAISE_APPLICATION_ERROR(-20999, 'did not parse code (null tokens)');
     else
-      dbms_output.put_line( json_serialize(j));
+      -- dbms_output.put_line( json_serialize(j));
       output := obj.build_code( j );
     end if;
 
 
-    dbms_output.PUT_LINE( '----' );
+    -- dbms_output.PUT_LINE( '----' );
     dbms_output.put_line( output );
   end test_acl_create;
 
