@@ -81,8 +81,8 @@ as
     );
 
     /* holds custom Match Recognize DEFINE expressions for RAS objects */
-    defines ddlt_util.mr_define_hash_hash := ddlt_util.mr_define_hash_hash(
-        security_class => ddlt_util.mr_define_exp_hash(
+    defines cSQL.parser_util.matchrecognize_define_expression_hash_hash := cSQL.parser_util.matchrecognize_define_expression_hash_hash(
+        security_class => cSQL.parser_util.matchrecognize_define_expression_hash(
             'w_create'      => q'[token = 'create']', -- create
             'w_application' => q'[token = 'application']', -- application
             'x_object_type' => q'[token = 'security_class']', -- security_class
@@ -91,7 +91,7 @@ as
             'n_privileges'  => q'[token = 'privileges']'
         ),
         
-        acls           => ddlt_util.mr_define_exp_hash(
+        acls           => cSQL.parser_util.matchrecognize_define_expression_hash(
             'w_create'      => q'[token = 'create']',
             'w_application' => q'[token = 'application']',
             'w_for' => q'[token = 'for']',
@@ -103,7 +103,7 @@ as
             'n_privileges'  => q'[token = 'privileges']'
         ),
 
-        policys        => ddlt_util.mr_define_exp_hash(
+        policys        => cSQL.parser_util.matchrecognize_define_expression_hash(
             'w_create'      => q'[token = 'create']',
             'w_application' => q'[token = 'application']',
             'x_object_type' => q'[token = 'policy']',
@@ -136,7 +136,7 @@ as
     * @return appropriate MATCH_RECOGNIZE PATTERN
     * @throws general_error thrown when requested obj_type not found
     */
-    function get_define( obj_type in ddlt_util.ras_obj_name_t ) return  ddlt_util.mr_define_exp_hash;
+    function get_define( obj_type in ddlt_util.ras_obj_name_t ) return  cSQL.parser_util.matchrecognize_define_expression_hash;
 
     function generate_json( obj_type in ddlt_util.ras_obj_name_t ) return clob;
     

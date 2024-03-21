@@ -1,6 +1,7 @@
 create or replace
 package body ddlt_ras
 as
+
     function get_pattern( obj_type in ddlt_util.ras_obj_name_t ) return clob
     as
     begin
@@ -18,7 +19,7 @@ as
     * @return appropriate MATCH_RECOGNIZE PATTERN
     * @throws general_error thrown when requested obj_type not found
     */
-    function get_define( obj_type in ddlt_util.ras_obj_name_t ) return  ddlt_util.mr_define_exp_hash
+    function get_define( obj_type in ddlt_util.ras_obj_name_t ) return  cSQL.parser_util.matchrecognize_define_expression_hash
     as
     begin
          if defines.exists(obj_type)

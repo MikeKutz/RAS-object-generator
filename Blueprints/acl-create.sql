@@ -1,6 +1,7 @@
 clear screen;
 set SERVEROUTPUT on;
 
+
 DECLARE
   bp      teJSON.Blueprint;
   v_privs teJSON.Blueprint;
@@ -10,7 +11,7 @@ DECLARE
   obj     cSQL.syntax_parser_t;
   h       MKLibrary.Hash_t;
 BEGIN
-  return;
+  
   bp      := new teJSON.Blueprint( 'procedure', 'acl-create', 'blueprint' );
 
   bp.set_snippet( 'name', 'make_acl');
@@ -70,7 +71,7 @@ sys.xs_acl.create_acl( name => '${OBJECT_NAME}'
   obj                        := new cSQL.syntax_parser_t( 'create', 'application', 'acl' );
   obj.matchrecognize_pattern := cSQL.ddlt_ras.patterns( cSQL.ddlt_ras.acls );
   
-  -- obj.matchrecognize_define  := cSQL.parser_util.aa2hash( cSQL.ddlt_ras.defines( cSQL.ddlt_ras.acls ) );
+  obj.matchrecognize_define  := cSQL.parser_util.aa2hash( cSQL.ddlt_ras.defines( cSQL.ddlt_ras.acls ) );
 
   obj.code_template          := bp;
   obj.execution_snippet      := '$.procedure.acl-create.exec';
