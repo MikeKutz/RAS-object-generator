@@ -8,7 +8,7 @@ DECLARE
   v_aces  teJSON.Blueprint;
   v_ace   teJSON.Blueprint;
   e       teJSON.Engine_t;
-  obj     cSQL.syntax_parser_t;
+  obj     cSQL.ras_acl_syntax;
   h       MKLibrary.Hash_t;
 BEGIN
   
@@ -68,7 +68,7 @@ sys.xs_acl.create_acl( name => '${OBJECT_NAME}'
     h.put_value(k,v);
   end loop;
 
-  obj                        := new cSQL.syntax_parser_t( 'create', 'application', 'acl' );
+  obj                        := new cSQL.ras_acl_syntax( 'create', 'application', 'acl' );
   obj.matchrecognize_pattern := cSQL.ddlt_ras.patterns( cSQL.ddlt_ras.acls );
   
   obj.matchrecognize_define  := cSQL.parser_util.aa2hash( cSQL.ddlt_ras.defines( cSQL.ddlt_ras.acls ) );
