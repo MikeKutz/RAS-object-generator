@@ -43,14 +43,14 @@ as
         acls => 'w_create w_application x_object_type x_object_name
         w_for w_security w_class x_security_class
         n_ace c_start_obj_array
-            (n_principal o_principal_name n_privileges c_start_list l_priv (c_comma l_priv)*  c_end_list
+            (x_principal_type? n_principal o_principal_name n_privileges c_start_list l_priv (c_comma l_priv)*  c_end_list
         (c_obj_comma|c_end_obj_array))+',
         policys => 'w_create w_application x_object_type x_object_name n_for c_start_obj_array
         (
            (x_type n_domain c_start_exp e_item+? c_end_exp n_acls c_start_list l_item (c_comma l_item)* c_end_list (c_obj_comma | c_end_obj_array) )
          | ( x_type x_privilege_name w_protects n_columns  c_start_list l_priv (c_comma l_priv)*  c_end_list (c_obj_comma | c_end_obj_array ) )
          | ( x_type n_source_columns c_start_list l_priv (c_comma l_priv)*  c_end_list
-            w_references n_table o_table n_target_columns  c_start_list l_priv (c_comma l_priv)*  c_end_list
+            n_references o_table_name n_columns  c_start_list l_priv (c_comma l_priv)*  c_end_list
             (n_where c_start_exp e_tok+ c_end_exp)?
         (c_obj_comma | c_end_obj_array) )
        )+',
@@ -89,6 +89,7 @@ as
             'n_under'       => q'[token = 'under']',
             'w_define'      => q'[token = 'define']',
             'n_privileges'  => q'[token = 'privileges']'
+            ,'x_principal_type' => q'[token in ( 'internal', 'external', 'database' )]'
         ),
         
         acls           => cSQL.parser_util.matchrecognize_define_expression_hash(
@@ -111,10 +112,10 @@ as
             'x_type'         => q'[token in ( 'rls', 'foreign', 'privilege' )]',
             'n_domain'         => q'[token = 'domain']',
             'n_acls'         => q'[token = 'acls']',
-            'n_source_columns'         => q'[token = 'source_columns']',
-            'w_references'           => q'[token = 'references']',
-            'n_table'               => q'[token = 'table']',
-            'n_target_columns'         => q'[token = 'target_columns']',
+            'n_source_columns'         => q'[token = 'key']',
+            'n_references'           => q'[token = 'references']',
+            -- 'n_table'           => q'[token = 'table']',
+            'n_target_columns'         => q'[token = 'match']',
             'n_where'               => q'[token = 'where']',
             'w_protects'           => q'[token = 'protects']',
             'n_columns'           => q'[token = 'columns']'

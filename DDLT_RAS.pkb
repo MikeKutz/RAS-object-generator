@@ -9,7 +9,7 @@ as
         then
             return patterns(obj_type);
         else
-            raise ddlt_util.general_error;
+            raise cSQL.ddlt_errors.general_error;
         end if;
     end;
 
@@ -26,7 +26,7 @@ as
         then
             return defines(obj_type);
         else
-            raise ddlt_util.general_error;
+            raise cSQL.ddlt_errors.general_error;
         end if;
     end;
     

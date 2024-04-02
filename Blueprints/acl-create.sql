@@ -41,7 +41,10 @@ ${@.variable.01-privs.name}.extend(1);
 ${@.variable.01-privs.name}( ${@.variable.01-privs.name}.last ) := '${j.value}';
 <%@- end-foreach %>
 
-${@.variable.02-ace.name} := new ${@.variable.02-ace.data-type}( privilege_list => ${@.variable.01-privs.name}, principal_name => '${i.principal}' );
+${@.variable.02-ace.name} := new ${@.variable.02-ace.data-type}( privilege_list => ${@.variable.01-privs.name}
+    ,principal_name => '${i.principal}'
+    ,principal_type => <%@ case( ${i.PRINCIPAL_TYPE} ) %><%@ when( database ) %>2<%@ when( external ) %>4<%@ else %>1<%@ end-case %>
+   );
 
 ${@.variable.03-aces.name}.extend(1);
 ${@.variable.03-aces.name}( ${@.variable.03-aces.name}.last ):= ${@.variable.02-ace.name};

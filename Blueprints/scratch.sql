@@ -1,18 +1,16 @@
 clear screen;
 set SERVEROUTPUT on;
 
-exec cSQL.ut_create.test_acl_create;
+-- exec cSQL.ut_create.test_acl_drop;
 
--- select * from SYNTAX_LISTS;
+-- exec cSQL.ut_create.test_acl_create;
 
--- select JSON_SERIALIZE( json(x.MATCHRECOGNIZE_DEFINE.json_clob) ) def_json
--- from syntax_lists x;
+-- exec cSQL.ut_create.test_sec_create;
 
--- select JSON_SERIALIZE( json(x.CODE_TEMPLATE.blueprint_json) ) def_json
--- from syntax_lists x;
+-- exec cSQL.ut_create.test_policy_create;
 
--- exec ut_create.test_acl_create;
+exec cSQL.ut_create.test_alter_drop;
+-- exec cSQL.ut_create.test_policy_create;
+-- exec cSQL.ut_create.test_policy_create;
 
--- select * from all_objects where OWNER ='TEJSON';
-
-
+select * from table( teJSON.Blueprint() );
