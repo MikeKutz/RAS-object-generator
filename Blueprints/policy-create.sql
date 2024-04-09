@@ -110,7 +110,7 @@ xs_data_security.create_policy( name=> '${OBJECT_NAME}'
   obj.matchrecognize_define  := cSQL.parser_util.aa2hash( cSQL.ddlt_ras.defines( cSQL.ddlt_ras.policys ) );
 
   obj.code_template          := bp;
-  obj.execution_snippet      := '$.procedure.policy-create.exec';
+  obj.append_snippet_list( '$.procedure.policy-create.exec' );
 
   -- save instrucktion here
   obj.upsert_group( 'RAS Objects');

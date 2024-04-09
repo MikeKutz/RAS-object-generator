@@ -27,7 +27,7 @@ BEGIN
   obj.matchrecognize_define  := h;
 
   obj.code_template          := bp;
-  obj.execution_snippet      := '$.procedure.policy-drop.exec';
+  obj.append_snippet_list( '$.procedure.policy-drop.exec' );
 
   -- save instrucktion here
   obj.upsert_group( 'RAS Objects');

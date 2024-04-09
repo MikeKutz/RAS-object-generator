@@ -77,7 +77,7 @@ sys.xs_acl.create_acl( name => '${OBJECT_NAME}'
   obj.matchrecognize_define  := cSQL.parser_util.aa2hash( cSQL.ddlt_ras.defines( cSQL.ddlt_ras.acls ) );
 
   obj.code_template          := bp;
-  obj.execution_snippet      := '$.procedure.acl-create.exec';
+  obj.append_snippet_list( '$.procedure.acl-create.exec' );
 
   -- save instrucktion here
   obj.upsert_group( 'RAS Objects');

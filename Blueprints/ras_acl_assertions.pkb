@@ -74,8 +74,8 @@ as
       -- assert principal_name is a principal_type
       case principal_type
         when 'internal' then null; -- TODO
-        when 'database' then
-          cSQL.ddlt_util.assert_schema( principal_name ); -- TODO: wrap and raise correctly
+        when 'database' then null;
+          -- cSQL.ddlt_util.assert_schema( principal_name ); -- TODO: wrap and raise correctly
         when 'external' then
           null;
         else
