@@ -12,7 +12,7 @@ BEGIN
   bp.set_snippet( 'name', 'drop_acl');
 
   bp.set_snippet( 'bdy',q'[xs_acl.delete_acl( acl => '${OBJECT_NAME}'
-      ,delete_option => <%@ case( ${FORCE} ) %><%@ when( cascade ) %>cascade<%@ when( force ) %>force<%@ else %>default<%@ end-case %>
+      ,delete_option => xs_admin_util.<%@ case( ${FORCE} ) %><%@ when( cascade ) %>cascade_option<%@ when( force ) %>allow_inconsistencies_option<%@ else %>default_option<%@ end-case %>
     );]');
 
   h := new MKLibrary.Hash_t();

@@ -12,7 +12,7 @@ BEGIN
   bp.set_snippet( 'name', 'drop_policy');
 
   bp.set_snippet( 'bdy',q'[xs_policy.delete_policy( policy_name => '${OBJECT_NAME}'
-      ,delete_option => <%@ case( ${FORCE} ) %><%@ when( cascade ) %>cascade<%@ when( force ) %>force<%@ else %>default<%@ end-case %>
+      ,delete_option => xs_admin_util.<%@ case( ${FORCE} ) %><%@ when( cascade ) %>cascade_option<%@ when( force ) %>allow_inconsistencies_option<%@ else %>default_option<%@ end-case %>
     );]');
 
   h := new MKLibrary.Hash_t();

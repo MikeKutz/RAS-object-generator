@@ -78,7 +78,7 @@ create application acl hr_acl for security class hrpriv aces (
     -- DBMS_OUTPUT.PUT_LINE( 'matching "' || obj.syntax_action || '"' );
     -- dbms_output.put_line( sql_texts( sql_key_acl)  );
     
-    j := obj.transpile( q'[drop application acl bobby_tables force]' );
+    j := obj.transpile( q'[drop application acl bobby_tables ]' );
 
     if j is null THEN
       dbms_output .put_line( 'j is null');
@@ -92,6 +92,58 @@ create application acl hr_acl for security class hrpriv aces (
     -- dbms_output.PUT_LINE( '----' );
     dbms_output.put_line( output );
   end test_acl_drop;
+
+  procedure test_sec_drop
+  as
+    obj    cSQL.syntax_parser_t;
+    j      JSON;
+    output CLOB;
+  BEGIN
+    obj := new cSQL.syntax_parser_t( 'drop', 'application', 'security_class');
+    -- DBMS_OUTPUT.PUT_LINE( 'matching "' || obj.match_string || '"' );
+    -- DBMS_OUTPUT.PUT_LINE( 'matching "' || obj.syntax_action || '"' );
+    -- dbms_output.put_line( sql_texts( sql_key_acl)  );
+    
+    j := obj.transpile( q'[drop application security_class bobby_tables cascade]' );
+
+    if j is null THEN
+      dbms_output .put_line( 'j is null');
+      RAISE_APPLICATION_ERROR(-20999, 'did not parse code (null tokens)');
+    else
+      dbms_output.put_line( json_serialize(j));
+      output := obj.build_code( j );
+    end if;
+
+
+    -- dbms_output.PUT_LINE( '----' );
+    dbms_output.put_line( output );
+  end test_sec_drop;
+
+  procedure test_policy_drop
+  as
+    obj    cSQL.syntax_parser_t;
+    j      JSON;
+    output CLOB;
+  BEGIN
+    obj := new cSQL.syntax_parser_t( 'drop', 'application', 'policy');
+    -- DBMS_OUTPUT.PUT_LINE( 'matching "' || obj.match_string || '"' );
+    -- DBMS_OUTPUT.PUT_LINE( 'matching "' || obj.syntax_action || '"' );
+    -- dbms_output.put_line( sql_texts( sql_key_acl)  );
+    
+    j := obj.transpile( q'[drop application policy hrprivs3 cascade]' );
+
+    if j is null THEN
+      dbms_output .put_line( 'j is null');
+      RAISE_APPLICATION_ERROR(-20999, 'did not parse code (null tokens)');
+    else
+      dbms_output.put_line( json_serialize(j));
+      output := obj.build_code( j );
+    end if;
+
+
+    -- dbms_output.PUT_LINE( '----' );
+    dbms_output.put_line( output );
+  end test_policy_drop;
 
   procedure test_sec_create
   as

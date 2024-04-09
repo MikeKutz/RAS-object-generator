@@ -11,7 +11,13 @@ BEGIN
 
   bp.set_snippet( 'name', 'alter_table');
 
-  bp.set_snippet( 'bdy', q'[<%@ case( ${ACTION} ) %><%@ when( add ) %>xs_data_security.apply_object_policy(
+  bp.set_snippet( 'bdy', q'[<%@ case( ${ACTION} ) %>
+<%@ when( add, @.add_clause ) %>
+<%@ when( modify, @.modify_clause ) %>
+<%@ when( drop, @.drop_clause ) %>
+<%@- end-case %>]' );
+
+  bp.set_snippet( 'add_clause', q'[xs_data_security.apply_object_policy(
      policy        => '${policy}'
     ,schema        => user
     ,object        => '${OBJECT_NAME}'
@@ -20,19 +26,22 @@ BEGIN
     ,statement_types => null -- todo
     ,aclmv           => trim( '${using}' )
   );
-  
-  <%@ case( ${ENABLE} ) %>
-  <%@ when( enable ) %>xs_data_security.enable_object_policy( '${policy}', user, '${OBJECT_NAME}' );
-  <%@ when( disable ) %>xs_data_security.disable_object_policy( '${policy}', user, '${OBJECT_NAME}' );
-  <%@- end-case %>
-  <%@ when(drop) %>xs_data_security.remove_object_policy( '${policy}', user, '${OBJECT_NAME}' );
-  <%@ when( modify ) %>  <%@- case( ${ENABLE} ) %>
-  <%@ when( enable ) %>xs_data_security.enable_object_policy( '${policy}', user, '${OBJECT_NAME}' );
-  <%@ when( disable ) %>xs_data_security.disable_object_policy( '${policy}', user, '${OBJECT_NAME}' );
-  <%@ else %>null;
-  <%@- end-case %>
+${@.enable_clause}
+]' );
 
-  <%@ end-case %>]' );
+    bp.set_snippet( 'drop_clause', q'[xs_data_security.remove_object_policy( 
+     policy        => '${policy}'
+    ,schema        => user
+    ,object        => '${OBJECT_NAME}'
+      );]' );
+
+    bp.set_snippet( 'modify_clause', q'[${@.enable_clause}]' );
+  
+  bp.set_snippet( 'enable_clause', q'[<%@ case( ${ENABLE} ) %>
+  <%@ when( enable ) %>xs_data_security.enable_object_policy( '${policy}', user, '${OBJECT_NAME}' );
+  <%@ when( disable ) %>xs_data_security.disable_object_policy( '${policy}', user, '${OBJECT_NAME}' );
+  <%@- end-case %>]' );
+
   -------------------------------------------------
   h := new MKLibrary.Hash_t();
   h.put_value ( 'w_alter',       q'[token = 'alter']');
@@ -65,7 +74,7 @@ BEGIN
   obj.matchrecognize_define  := h;
 
   obj.code_template          := bp;
-  obj.execution_snippet      := '$.procedure.table-alter.exec';
+  obj.append_snippet_list( '$.procedure.table-alter.exec' );
 
   -- save instrucktion here
   obj.upsert_group( 'RAS Objects');

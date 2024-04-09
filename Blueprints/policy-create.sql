@@ -37,7 +37,7 @@ BEGIN
 
   v_col_list := new teJSON.Blueprint( 'variable', '04-col-list', 'blueprint' );
   v_col_list.set_snippet( 'name', 'col_list');
-  v_col_list.set_snippet( 'data-type', 'xs$name_list');
+  v_col_list.set_snippet( 'data-type', 'xs$list');
 
   v_f_keys := new teJSON.Blueprint( 'variable', '05-f-keys', 'blueprint' );
   v_f_keys.set_snippet( 'name', 'fk_columns');
@@ -52,13 +52,14 @@ BEGIN
   bp.add_blueprint( v_col_list ); -- (sub) list of Columns for Column Protection
   bp.add_blueprint( v_f_keys ); -- (sub) list of Foreign Key column mappings
   
-  bp.set_snippet( 'bdy', q'[${@.variable.01-realm.name} := new ${@.variable.01-realm.date-type}();
+  bp.set_snippet( 'bdy', q'[${@.variable.01-realm.name} := new ${@.variable.01-realm.data-type}();
+${@.variable.02-columns.name} := new ${@.variable.02-columns.data-type}();
 
 <%@ foreach( $.for, i ) %>
 <%@- case( ${i.TYPE} ) +%>
 <%@ when( rls ) +%>
 -- Row Level policy
-${@.variable.03-acls.name} := new ${@.variable.03-acls.date-type}();<%@ foreach( i.acls, j ) %>
+${@.variable.03-acls.name} := new ${@.variable.03-acls.data-type}();<%@ foreach( i.acls, j ) %>
 ${@.variable.03-acls.name}.extend(1);
 ${@.variable.03-acls.name}( ${@.variable.03-acls.name}.last ) := '${j.value}';
 <%@ end-foreach %>
@@ -70,16 +71,16 @@ ${@.variable.01-realm.name}( ${@.variable.01-realm.name}.last ) := new ${@.varia
 );
 <%@ when( foreign )+ %>
 -- FK domain
-${@.variable.05-f-keys.name} := new ${@.variable.05-f-keys.data-type}()
+${@.variable.05-f-keys.name} := new ${@.variable.05-f-keys.data-type}();
 <%@ foreach( i.key, r ) %>
-${@.variable.05-f-keys.name}.expand(1);
+${@.variable.05-f-keys.name}.extend(1);
 ${@.variable.05-f-keys.name}( ${@.variable.05-f-keys.name}.last ) := new ${@.variable.05-f-keys.element-data-type}( '${r.value}', '${r.value}', 1);
 <%@ end-foreach %>
 ${@.variable.01-realm.name}.extend(1);
 ${@.variable.01-realm.name}( ${@.variable.01-realm.name}.last ) := new ${@.variable.01-realm.element-data-type}(
       parent_schema  => user
       ,parent_object => '${i.references}'
-      ,key_list      => ${@.variable.01-realm.name}
+      ,key_list      => ${@.variable.05-f-keys.name}
       ,when_condition => trim( '❌${i.where}❌' )
       );
 <%@- when( privilege ) %>
@@ -99,7 +100,7 @@ ${@.variable.02-columns.name}( ${@.variable.02-columns.name}.last ) := new ${@.v
 <%@ end-case %><%@ end-foreach %>
 
 xs_data_security.create_policy( name=> '${OBJECT_NAME}'
-    realm_constrain_list => ${@.variable.01-realm.name}
+   ,realm_constraint_list => ${@.variable.01-realm.name}
   ,column_constraint_list => ${@.variable.02-columns.name}
 );
 ]' );
