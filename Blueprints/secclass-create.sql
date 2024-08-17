@@ -45,7 +45,6 @@ BEGIN
   ${@.variable.02-parent.name}( ${@.variable.02-parent.name}.last ) := '${i.value}';
   <%@ end-foreach %>
 
-  return; -- debug
   sys.xs_security_class.create_security_class( name => '${OBJECT_NAME}'
     ,priv_list   => ${@.variable.01-privs.name}
     ,parent_list => ${@.variable.02-parent.name}
